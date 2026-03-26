@@ -1,0 +1,50 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/iot_db?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    username: iot_user
+    password: iot1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 3000ms
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 300000  # 기본 TTL 5분 (ms)
+
+logging:
+  level:
+    com.iot.pipeline: DEBUG
+    org.springframework.cache: DEBUG
+
+# IoT 검증 파이프라인 설정
+# 신규 장비 추가 시 여기서 센서 범위를 추가할 수 있도록 외부화
+iot:
+  validation:
+    topic-prefix: "iot/devices/"
+    sensors:
+      temperature:
+        min: -40.0
+        max: 125.0
+      humidity:
+        min: 0.0
+        max: 100.0
+      pressure:
+        min: 300.0
+        max: 1100.0
+      battery:
+        min: 0.0
+        max: 100.0
